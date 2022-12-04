@@ -1,0 +1,104 @@
+---
+title: "STA404/504 HW4"
+author: "Ethan Gutknecht"
+date: "08/21/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#import libraries
+library(dplyr)
+library(tidyverse)
+```
+
+### Learning Objectives:   
+•	Basic visualizations and aesthetic settings
+
+
+### The items below will be considered for grading:  
+•	The plots are correct, with professionalism.  
+•	Axis labels and titles are correct and complete.  
+•	Units are clearly labeled.  
+•	Proper grammar in the write-up.  
+•	The discussion and the story told is interesting and appropriate.   
+
+
+### Question 1
+
+Load the shuffledplaylist.csv dataset into R by the code below. This data includes information on songs from a shuffled Spotify playlist.
+
+\#read the dataset to R-studio  
+\textbf{music<-read.csv("shuffled\_playlist.csv")}
+
+
+```{r}
+# Read data set
+music <- read.csv("shuffled_playlist.csv")
+head(music)
+```
+
+How do the tempo values differ by genre? Use a side-by-side style of plot that shows both the distribution, as well as summary statistics to help tell a story of how they differ. Describe in a few sentences what this display tells us about the relationship between the variables. 
+
+
+```{r}
+# Create plot
+ggplot(aes(x=tempo), data=music) +
+  geom_violin(aes(y=genre, fill=genre), alpha=0.5) +
+  geom_boxplot(aes(y=genre), alpha=0.9, width=0.2) +
+  labs(x="Temp of Songs", y= "Genre of Music") +
+  ggtitle("Box and Violin Plots of Song Genres and Tempos") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# Show summary stats
+music %>% group_by(genre) %>% summarise(meanTempo=mean(tempo), medianTemp=median(tempo))
+```
+
+
+
+
+### Question 2
+
+The data "\textbf{Arthritis}" is a dataset from the package "\textbf{vcd}". It contains data in Koch & Edwards (1988), which is collected from a double-blind clinical trial investigating a new treatment for rheumatoid arthritis. To access the dataset, you may use the following code: 
+
+`\textbf{install.packages("vcd")}  
+\textbf{library(vcd)}    
+\#Load Arthritis dataset (data frame)    
+\textbf{data(Arthritis)}    
+\textbf{?Arthritis}
+
+```{r}
+# install.packages("vcd")
+library(vcd)
+
+#Load Arthritis dataset (data frame)
+data(Arthritis)
+?Arthritis
+```
+
+
+Please create a stacked/grouped bar graph that summarizes the number of patients who received Placebo/Treatment, and the outcome of the treatment (None, Some, or Marked improvement). On the plot, please have the numbers displayed in the center of the corresponding bar. Make sure appropriate aesthetic settings such as color, labels, titles (make it centered), legends, etc, are used, if applicable.
+
+```{r}
+# Stacked bar
+  # patients who recieved placebo/treatment
+  # outcome of treatment
+  # numbers displayed on center
+  # colors, titles, etc
+
+ggplot() +
+  geom_bar(aes(x=Treatment, fill=Improved), data=Arthritis, stat="count",
+           position="stack") +
+  geom_text(aes(x=Treatment,label=..count..,group=Improved), stat="count", 
+            data=Arthritis,position = position_stack(vjust= 0.5), size=5, vjust=-0) + 
+  labs(x="Type of Treatment", y="Number of People") +
+  ggtitle("Stacked-Bar Graph of Treatments of Arthritis Patients and the Outomes") +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
+
+Based on my graph, you can see the treated patients had more people marked as improved than the placebo.
+
+
+
