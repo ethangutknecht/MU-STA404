@@ -1,0 +1,72 @@
+---
+title: "Solo Project - Ethan Gutknecht"
+author: "Ethan Gutknecht"
+date: "2022-10-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Load Libraries 
+library(tidyverse)
+library(lubridate)
+```
+
+# Mortality Data By county of residence Solo Project - Ethan Gutknecht
+```{r}
+# Load and display data from CSV file
+covidData <- read.csv("COVIDDeathData_CountyOfResidence.csv")
+```
+
+
+```{r}
+# Format Data
+covidDataG1 <- covidData %>% 
+  mutate(date = ymd(Onset.Date)) %>% 
+  mutate(year = as.character(year(date))) %>% 
+  group_by(year, Age.Range) %>% 
+  summarize(numberOfCases=n())
+
+# Cases By Age Range 
+ggplot(data=covidDataG1) +
+  geom_histogram(aes(x=Age.Range, y=numberOfCases, fill = year), stat="identity", position = "dodge")
+
+```
+This graph shows the data of how many cases by age group over the years. I still need to add a title, labels, legend, etc.
+
+
+
+```{r}
+# Format Data
+covidDataG2 <- covidData %>% 
+  mutate(date = ymd(Onset.Date))
+
+# Cases By Date Over Time
+ggplot(data=covidDataG2) +
+  geom_line(aes(x=date), stat="count") 
+```
+I'm not entirely sold on this yet. I want to add more stuff to it like cases by gender over time or something. This will be the COVID data over the period of the time of the data set.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
